@@ -14,7 +14,7 @@ describe("Register Service", () => {
   });
 
   it("should be able to register", async () => {
-    const user = await sut.execute({
+    const { user } = await sut.execute({
       name: "John Doe",
       email: "johndoe@example.com",
       password: "123456",
@@ -24,7 +24,7 @@ describe("Register Service", () => {
   });
 
   it("should hash user password upon registration", async () => {
-    const user = await sut.execute({
+    const { user } = await sut.execute({
       name: "John Doe",
       email: "johndoe@example.com",
       password: "123456",

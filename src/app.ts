@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import fastify from "fastify";
 import fastifyJwt from "@fastify/jwt";
 import fastifyCookie from "@fastify/cookie";
@@ -9,13 +10,20 @@ import { checkInsRoutes } from "./http/controllers/check-ins/routes";
 
 export const app = fastify();
 
+const privateKey = fs.readFileSync("./private-key.pem", "utf8");
+const publicKey = fs.readFileSync("./public-key.pem", "utf8");
+
 app.register(fastifyJwt, {
-  secret: env.JWT_SECRET,
+  secret: {
+    private: privateKey,
+    public: publicKey,
+  },
   cookie: {
     cookieName: "refreshToken",
     signed: false,
   },
   sign: {
+    algorithm: "RS256",
     expiresIn: "10m",
   },
 });

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "tsx watch src/server.ts",
+    "typecheck": "tsc --noEmit",
     "build": "tsup src",
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",

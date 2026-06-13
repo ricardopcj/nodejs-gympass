@@ -1,4 +1,4 @@
-import { Gym } from "@prisma/client";
+import { Gym } from "../entities/gym";
 import { GymsRepository } from "../repositories/gyms-repository";
 
 interface FetchNearbyGymsServiceRequest {

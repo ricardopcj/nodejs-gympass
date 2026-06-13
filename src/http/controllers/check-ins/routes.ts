@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-
+import { prisma } from "../../../lib/prisma";
 import { verifyJwt } from "../../middlewares/verify-jwt";
 import { verifyUserRole } from "../../middlewares/verify-user-role";
 
@@ -18,6 +18,18 @@ export async function checkInsRoutes(app: FastifyInstance) {
   app.patch(
     "/check-ins/:checkInId/validate",
     { onRequest: [verifyUserRole("ADMIN")] },
-    validate
+    validate,
   );
+
+  if (process.env.NODE_ENV === "test") {
+    app.patch("/users/test/promote-admin", async (request, reply) => {
+      const { email } = request.body as { email: string };
+      await prisma.user.update({
+        where: { email },
+        data: { role: "ADMIN" },
+      });
+
+      return reply.status(204).send();
+    });
+  }
 }

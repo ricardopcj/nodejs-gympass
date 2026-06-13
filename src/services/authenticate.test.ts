@@ -3,6 +3,7 @@ import { hash } from "bcryptjs";
 import { AuthenticateService } from "./authenticate";
 import { InMemoryUserRepository } from "../repositories/in-memory/in-memory-users-repository";
 import { InvalidCredentialsError } from "./errors/invalid-credentials-error";
+import { Role } from "../entities/role";
 
 let usersRepository: InMemoryUserRepository;
 let sut: AuthenticateService;
@@ -15,9 +16,12 @@ describe("Authenticate Service", () => {
 
   it("should be able to register", async () => {
     await usersRepository.create({
+      id: "user-01",
       name: "John Doe",
       email: "johndoe@example.com",
-      password_hash: await hash("123456", 8),
+      passwordHash: await hash("123456", 8),
+      role: Role.MEMBER,
+      createdAt: new Date(),
     });
 
     const { user } = await sut.execute({
@@ -33,22 +37,25 @@ describe("Authenticate Service", () => {
       sut.execute({
         email: "johndoe@example.com",
         password: "123456",
-      })
+      }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
 
   it("should not be able to authenticate with wrong password", async () => {
     await usersRepository.create({
+      id: "user-01",
       name: "John Doe",
       email: "johndoe@example.com",
-      password_hash: await hash("123456", 8),
+      passwordHash: await hash("123456", 8),
+      role: Role.MEMBER,
+      createdAt: new Date(),
     });
 
     await expect(() =>
       sut.execute({
         email: "johndoe@example.com",
         password: "123123",
-      })
+      }),
     ).rejects.toBeInstanceOf(InvalidCredentialsError);
   });
 });

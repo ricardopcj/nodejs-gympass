@@ -1,4 +1,5 @@
-import { Gym } from "@prisma/client";
+import { randomUUID } from "crypto";
+import { Gym } from "../entities/gym";
 import { GymsRepository } from "../repositories/gyms-repository";
 
 interface CreateGymServiceRequest {
@@ -24,6 +25,7 @@ export class CreateGymService {
     longitude,
   }: CreateGymServiceRequest): Promise<CreateGymServiceResponse> {
     const gym = await this.gymsRepository.create({
+      id: randomUUID(),
       title,
       description,
       phone,
@@ -31,8 +33,6 @@ export class CreateGymService {
       longitude,
     });
 
-    return {
-      gym,
-    };
+    return { gym };
   }
 }

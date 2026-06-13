@@ -30,10 +30,7 @@ describe("Register Service", () => {
       password: "123456",
     });
 
-    const isPassordCorrectlyHashed = await compare(
-      "123456",
-      user.password_hash
-    );
+    const isPassordCorrectlyHashed = await compare("123456", user.passwordHash);
 
     expect(isPassordCorrectlyHashed).toBe(true);
   });
@@ -52,7 +49,7 @@ describe("Register Service", () => {
         name: "John Doe",
         email,
         password: "123456",
-      })
+      }),
     ).rejects.toBeInstanceOf(UserAlreadyExistsError);
   });
 });

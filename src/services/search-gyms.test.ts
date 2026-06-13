@@ -13,6 +13,7 @@ describe("Search Gyms Service", () => {
 
   it("should be able to search for gyms", async () => {
     await gymsRepository.create({
+      id: "gym-01",
       title: "JavaScript Gym",
       description: null,
       phone: null,
@@ -21,6 +22,7 @@ describe("Search Gyms Service", () => {
     });
 
     await gymsRepository.create({
+      id: "gym-02",
       title: "TypeScript Gym",
       description: null,
       phone: null,
@@ -42,6 +44,7 @@ describe("Search Gyms Service", () => {
   it("should be able to fetch paginated gym search", async () => {
     for (let i = 1; i <= 22; i++) {
       await gymsRepository.create({
+        id: "gym-01",
         title: `JavaScript Gym ${i}`,
         description: null,
         phone: null,

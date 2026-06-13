@@ -3,6 +3,7 @@ import { hash } from "bcryptjs";
 import { GetUserProfileService } from "./get-user-profile";
 import { InMemoryUserRepository } from "../repositories/in-memory/in-memory-users-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
+import { Role } from "../entities/role";
 
 let usersRepository: InMemoryUserRepository;
 let sut: GetUserProfileService;
@@ -15,9 +16,12 @@ describe("Get User Profile Service", () => {
 
   it("should be able to get user profile", async () => {
     const createdUser = await usersRepository.create({
+      id: "user-01",
       name: "John Doe",
       email: "johndoe@example.com",
-      password_hash: await hash("123456", 8),
+      passwordHash: await hash("123456", 8),
+      role: Role.MEMBER,
+      createdAt: new Date(),
     });
 
     const { user } = await sut.execute({
@@ -32,7 +36,7 @@ describe("Get User Profile Service", () => {
     await expect(() =>
       sut.execute({
         userId: "non-existing-id",
-      })
+      }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });
 });

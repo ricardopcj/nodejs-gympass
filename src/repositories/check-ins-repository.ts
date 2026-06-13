@@ -1,9 +1,9 @@
-import { CheckIn, Prisma } from "@prisma/client";
+import { CheckIn } from "../entities/check-in";
 
 export interface CheckInsRepository {
   findById(id: string): Promise<CheckIn | null>;
   findManyByUserId(userId: string, page: number): Promise<CheckIn[]>;
-  create(data: Prisma.CheckInUncheckedCreateInput): Promise<CheckIn>;
+  create(checkIn: CheckIn): Promise<CheckIn>;
   findByUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>;
   countByUserId(userId: string): Promise<number>;
   save(checkIn: CheckIn): Promise<CheckIn>;

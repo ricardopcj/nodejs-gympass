@@ -13,13 +13,19 @@ describe("Ger User Metrics Service", () => {
 
   it("should be able to get check-ins count from metrics", async () => {
     await checkInsRepository.create({
-      gym_id: "gym-01",
-      user_id: "user-01",
+      id: "check-in-01",
+      gymId: "gym-01",
+      userId: "user-01",
+      createdAt: new Date(),
+      validatedAt: null,
     });
 
     await checkInsRepository.create({
-      gym_id: "gym-02",
-      user_id: "user-01",
+      id: "check-in-02",
+      gymId: "gym-02",
+      userId: "user-01",
+      createdAt: new Date(),
+      validatedAt: null,
     });
 
     const { checkInsCount } = await sut.execute({

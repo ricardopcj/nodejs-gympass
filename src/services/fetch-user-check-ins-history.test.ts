@@ -13,13 +13,19 @@ describe("Fetch User Check-in History Service", () => {
 
   it("should be able to fetch check-in history", async () => {
     await checkInsRepository.create({
-      gym_id: "gym-01",
-      user_id: "user-01",
+      id: "check-in-01",
+      gymId: "gym-01",
+      userId: "user-01",
+      createdAt: new Date(),
+      validatedAt: null,
     });
 
     await checkInsRepository.create({
-      gym_id: "gym-02",
-      user_id: "user-01",
+      id: "check-in-02",
+      gymId: "gym-02",
+      userId: "user-01",
+      createdAt: new Date(),
+      validatedAt: null,
     });
 
     const { checkIns } = await sut.execute({
@@ -29,16 +35,19 @@ describe("Fetch User Check-in History Service", () => {
 
     expect(checkIns).toHaveLength(2);
     expect(checkIns).toEqual([
-      expect.objectContaining({ gym_id: "gym-01" }),
-      expect.objectContaining({ gym_id: "gym-02" }),
+      expect.objectContaining({ gymId: "gym-01" }),
+      expect.objectContaining({ gymId: "gym-02" }),
     ]);
   });
 
   it("should be able to fetch paginated check-in history", async () => {
     for (let i = 1; i <= 22; i++) {
       await checkInsRepository.create({
-        gym_id: `gym-${i}`,
-        user_id: "user-01",
+        id: `check-in-${i}`,
+        gymId: `gym-${i}`,
+        userId: "user-01",
+        createdAt: new Date(),
+        validatedAt: null,
       });
     }
 
@@ -49,8 +58,8 @@ describe("Fetch User Check-in History Service", () => {
 
     expect(checkIns).toHaveLength(2);
     expect(checkIns).toEqual([
-      expect.objectContaining({ gym_id: "gym-21" }),
-      expect.objectContaining({ gym_id: "gym-22" }),
+      expect.objectContaining({ gymId: "gym-21" }),
+      expect.objectContaining({ gymId: "gym-22" }),
     ]);
   });
 });

@@ -13,6 +13,7 @@ describe("Fetch Nearby Gyms Service", () => {
 
   it("should be able to fetch nearby gyms", async () => {
     await gymsRepository.create({
+      id: "gym-01",
       title: "Near Gym",
       description: null,
       phone: null,
@@ -21,6 +22,7 @@ describe("Fetch Nearby Gyms Service", () => {
     });
 
     await gymsRepository.create({
+      id: "gym-02",
       title: "Far Gym",
       description: null,
       phone: null,

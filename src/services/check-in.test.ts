@@ -26,7 +26,7 @@ describe("Check-in Service", () => {
   });
 
   afterEach(() => {
-    vi.useRealTimers;
+    vi.useRealTimers();
   });
 
   it("should be able to check in", async () => {
@@ -58,7 +58,7 @@ describe("Check-in Service", () => {
         userId: "user-01",
         userLatitude: -27.2092052,
         userLongitude: -49.6401091,
-      })
+      }),
     ).rejects.toBeInstanceOf(Error);
   });
 

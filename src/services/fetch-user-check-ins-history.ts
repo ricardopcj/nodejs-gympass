@@ -1,4 +1,4 @@
-import { CheckIn } from "@prisma/client";
+import { CheckIn } from "../entities/check-in";
 import { CheckInsRepository } from "../repositories/check-ins-repository";
 
 interface FetchUserCheckInsHistoryServiceRequest {
@@ -19,7 +19,7 @@ export class FetchUserCheckInsHistoryService {
   }: FetchUserCheckInsHistoryServiceRequest): Promise<FetchUserCheckInsHistoryServiceResponse> {
     const checkIns = await this.checkInsRepository.findManyByUserId(
       userId,
-      page
+      page,
     );
 
     return {

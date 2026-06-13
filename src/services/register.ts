@@ -1,7 +1,9 @@
-import { User } from "@prisma/client";
+import { randomUUID } from "node:crypto";
 import { hash } from "bcryptjs";
+import { User } from "../entities/user";
 import { UsersRepository } from "../repositories/users-repository";
 import { UserAlreadyExistsError } from "./errors/user-already-exists-error";
+import { Role } from "../entities/role";
 
 interface RegisterServiceRequest {
   name: string;
@@ -21,16 +23,19 @@ export class RegisterService {
     email,
     password,
   }: RegisterServiceRequest): Promise<RegisterServiceResponse> {
-    const password_hash = await hash(password, 8);
+    const passwordHash = await hash(password, 8);
 
     const userWithSameEmail = await this.usersRepository.findByEmail(email);
 
     if (userWithSameEmail) throw new UserAlreadyExistsError();
 
     const user = await this.usersRepository.create({
+      id: randomUUID(),
       name,
       email,
-      password_hash,
+      passwordHash,
+      role: Role.MEMBER,
+      createdAt: new Date(),
     });
 
     return { user };

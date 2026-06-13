@@ -1,10 +1,11 @@
+import { randomUUID } from "node:crypto";
 import { CheckInsRepository } from "../repositories/check-ins-repository";
 import { GymsRepository } from "../repositories/gyms-repository";
 import { MaxDistanceError } from "./errors/max-distance-error";
 import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
 import { getDistanceBetweenCoordinates } from "../utils/get-distance-between-coordinates";
-import { CheckIn } from "@prisma/client";
+import { CheckIn } from "../entities/check-in";
 
 interface CheckInServiceRequest {
   userId: string;
@@ -20,7 +21,7 @@ interface CheckInServiceResponse {
 export class CheckInService {
   constructor(
     private checkInsRepository: CheckInsRepository,
-    private gymsRepository: GymsRepository
+    private gymsRepository: GymsRepository,
   ) {}
 
   async execute({
@@ -38,9 +39,9 @@ export class CheckInService {
     const distance = getDistanceBetweenCoordinates(
       { latitude: userLatitude, longitude: userLongitude },
       {
-        latitude: gym.latitude.toNumber(),
-        longitude: gym.longitude.toNumber(),
-      }
+        latitude: gym.latitude,
+        longitude: gym.longitude,
+      },
     );
 
     const MAX_DISTANCE_IN_KILOMETERS = 0.1;
@@ -51,7 +52,7 @@ export class CheckInService {
 
     const checkInOnSameDay = await this.checkInsRepository.findByUserIdOnDate(
       userId,
-      new Date()
+      new Date(),
     );
 
     if (checkInOnSameDay) {
@@ -59,8 +60,11 @@ export class CheckInService {
     }
 
     const checkIn = await this.checkInsRepository.create({
-      gym_id: gymId,
-      user_id: userId,
+      id: randomUUID(),
+      gymId,
+      userId,
+      createdAt: new Date(),
+      validatedAt: null,
     });
 
     return { checkIn };

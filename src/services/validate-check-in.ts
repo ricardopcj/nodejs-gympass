@@ -1,4 +1,4 @@
-import { CheckIn } from "@prisma/client";
+import { CheckIn } from "../entities/check-in";
 import dayjs from "dayjs";
 import { CheckInsRepository } from "../repositories/check-ins-repository";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error";
@@ -25,15 +25,15 @@ export class ValidateCheckInService {
     }
 
     const distanceInMinutesFromCheckInCreation = dayjs(new Date()).diff(
-      checkIn.created_at,
-      "minutes"
+      checkIn.createdAt,
+      "minutes",
     );
 
     if (distanceInMinutesFromCheckInCreation > 20) {
       throw new LateCheckInValidationError();
     }
 
-    checkIn.validated_at = new Date();
+    checkIn.validatedAt = new Date();
 
     await this.checkInsRepository.save(checkIn);
 
